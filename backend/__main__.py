@@ -26,7 +26,7 @@ def get_all_jobs():
 def add_job():
     payload = request.json
     jobs.append(payload)
-    return json.dumps(jobs)
+    return payload
 
 
 if __name__ == "__main__":
