@@ -1,32 +1,18 @@
-from flask import Flask, request
 import json
+from flask import Flask, request
+from backend.views import jobs
 
 app = Flask(__name__)
+app.register_blueprint(jobs.routes, url_prefix='/api/v1/jobs')
 
 companies = [{'name': 'Pfizer'},
              {'name': 'Novo Nordisk'}
              ]
 
-jobs = [{'name': 'postdoctoral researcher'}, {
-    'name': 'team leader'}, {'name': 'associate professor'}
-]
-
 
 @app.get('/api/companies/')
 def get_all_companies():
     return json.dumps(companies)
-
-
-@app.get('/api/jobs/')
-def get_all_jobs():
-    return json.dumps(jobs)
-
-
-@app.post('/api/jobs/')
-def add_job():
-    payload = request.json
-    jobs.append(payload)
-    return payload
 
 
 if __name__ == "__main__":
