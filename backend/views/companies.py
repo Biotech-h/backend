@@ -1,12 +1,12 @@
 import json
-from flask import Blueprint
+from flask import Blueprint, abort
 
 routes = Blueprint('companies', __name__)
 
-companies = [
-    {'uid': 1, 'name': 'Moderna', 'region': 'USA', 'field': 'biotech'},
-    {'uid': 2, 'name': 'Roche', 'region': 'Switzerland', 'field': 'biotech'}
-]
+companies = {
+    1: {'name': 'Moderna', 'region': 'USA', 'field': 'biotech'},
+    2: {'name': 'Roche', 'region': 'Switzerland', 'field': 'biotech'}
+}
 
 
 @routes.get('/')
@@ -14,18 +14,20 @@ def get_all():
     return json.dumps(companies)
 
 
-@routes.get('/<int:id>')
-def get_company_by_id(id):
-    for company in companies:
-        if company['uid'] == id:
-            return json.dumps(company)
-    raise IndexError('Company not found')
+@routes.get('/<int:uid>')
+def get_by_id(uid):
+    company = companies.get(uid)
+    if company is not None:
+        return json.dumps(company)
+    else:
+        abort(404, f"Unfortunately, company not found, uid: {uid}")
 
 
-@routes.delete('/<int:id>')
-def del_company_by_id(id):
-    for company in companies:
-        if company['uid'] == id:
-            del companies[companies.index(company)]
-            return json.dumps(companies)
-    raise IndexError('Company not found')
+@routes.delete('/<int:uid>')
+def del_by_id(uid):
+    company = companies.get(uid)
+    if company is not None:
+        del companies[uid]
+        return json.dumps(companies)
+    else:
+        abort(404, f"Unfortunately, company not found, uid: {uid}")
