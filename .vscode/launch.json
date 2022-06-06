@@ -8,7 +8,8 @@
             "request": "launch",
             "module": "backend",
             "jinja": true,
-            "justMyCode": true
+            "justMyCode": true, 
+            "console": "internalConsole"
         }
     ]
 }
