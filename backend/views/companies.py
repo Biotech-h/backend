@@ -1,5 +1,5 @@
 import json
-from flask import Blueprint, abort
+from flask import Blueprint, abort, request
 
 routes = Blueprint('companies', __name__)
 
@@ -29,3 +29,14 @@ def del_by_id(uid):
         abort(404, f"Unfortunately, company not found, uid: {uid}")
     del companies[uid]
     return json.dumps(companies)
+
+
+@routes.put('/<int:uid>')
+def change_company(uid):
+    new_company = request.json
+    for company in companies:
+        if company == uid:
+            companies[uid] = new_company
+            return json.dumps(companies)
+    abort(404, f"Unfortunately, company not found, uid: {uid}")
+
