@@ -17,17 +17,15 @@ def get_all():
 @routes.get('/<int:uid>')
 def get_by_id(uid):
     company = companies.get(uid)
-    if company is not None:
-        return json.dumps(company)
-    else:
+    if company is None:
         abort(404, f"Unfortunately, company not found, uid: {uid}")
+    return json.dumps(company)
 
 
 @routes.delete('/<int:uid>')
 def del_by_id(uid):
     company = companies.get(uid)
-    if company is not None:
-        del companies[uid]
-        return json.dumps(companies)
-    else:
+    if company is None:
         abort(404, f"Unfortunately, company not found, uid: {uid}")
+    del companies[uid]
+    return json.dumps(companies)
