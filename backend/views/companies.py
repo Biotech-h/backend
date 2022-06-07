@@ -34,9 +34,8 @@ def del_by_id(uid):
 @routes.put('/<int:uid>')
 def change_company(uid):
     new_company = request.json
-    for company in companies:
-        if company == uid:
-            companies[uid] = new_company
-            return json.dumps(companies)
-    abort(404, f"Unfortunately, company not found, uid: {uid}")
+    if uid not in companies:
+        abort(404, f"Unfortunately, company not found, uid: {uid}")
+    companies[uid] = new_company
+    return json.dumps(companies)
 
