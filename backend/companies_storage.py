@@ -1,4 +1,4 @@
-from flask import abort
+from flask import abort, json
 
 
 class CompanyStorage:
@@ -26,4 +26,4 @@ class CompanyStorage:
         return self.storage[uid]
 
     def get_all(self):
-        return self.storage
+        return json.dumps(self.storage)
