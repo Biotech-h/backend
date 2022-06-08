@@ -21,12 +21,12 @@ class CompaniesStorage:
     def update(self, company, uid):
         if not self.storage.get(uid):
             abort(404, f'uid {uid} not found')
-        self.storage[uid] = company   
-        
+        self.storage[uid] = company
+
     def get_by_id(self, uid):
         if not self.storage.get(uid):
             abort(404, f'uid {uid} not found')
         return self.storage[uid]
 
     def get_all(self):
-        return self.storage
+        return self.storage.values()

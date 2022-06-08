@@ -15,7 +15,7 @@ def add():
 
 @routes.get('/')
 def get_all():
-    return json.dumps(storage.get_all())
+    return json.dumps(list(storage.get_all()))
 
 
 @routes.get('/<int:uid>')
@@ -37,4 +37,3 @@ def change_company(uid):
     new_company = request.json
     storage.update(new_company, uid)
     return json.dumps(storage.get_all())
-
