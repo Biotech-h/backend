@@ -6,11 +6,12 @@ storage = CompaniesStorage()
 
 routes = Blueprint('companies', __name__)
 
-@routes.post('/<int:uid>')
-def add(uid):
+
+@routes.post('/')
+def add():
     new_company = request.json
-    storage.add(new_company, uid)
-    return json.dumps(storage.get_all())
+    return storage.add(new_company)
+
 
 @routes.get('/')
 def get_all():
