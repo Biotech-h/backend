@@ -19,21 +19,21 @@ def get_all():
 
 
 @routes.get('/<int:uid>')
-def getjob_by_id(uid):
+def get_by_id(uid):
     job = jobs.get(uid)
     return json.dumps(job)
 
 
 @routes.delete('/<int:uid>')
-def deljob_by_id(uid):
+def del_by_id(uid):
     del jobs[uid]
-    return json.dumps(jobs)
+    return {}, 204
 
 
 @routes.put('/<int:uid>')
 def change_job(uid):
     jobs[uid] = request.json
-    return json.dumps(jobs)
+    return jobs.get(uid)
 
 
 @routes.post('/')
