@@ -1,12 +1,13 @@
-from flask import abort, json
+from flask import abort
 
 
-class CompanyStorage:
+class CompaniesStorage:
     def __init__(self):
         self.storage = {}
 
-    def add(self, company):
-        uid = company['id']
+    def add(self, company, uid):
+        if self.storage.get(uid):
+            abort(400, f'uid {uid} already exists')
         self.storage[uid] = company
 
     def delete(self, uid):
@@ -14,8 +15,7 @@ class CompanyStorage:
             abort(404, f'uid {uid} not found')
         del self.storage[uid]
 
-    def update(self, company):
-        uid = company['id']
+    def update(self, company, uid):
         if not self.storage.get(uid):
             abort(404, f'uid {uid} not found')
         self.storage[uid] = company   
@@ -26,4 +26,4 @@ class CompanyStorage:
         return self.storage[uid]
 
     def get_all(self):
-        return json.dumps(self.storage)
+        return self.storage
