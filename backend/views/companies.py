@@ -1,22 +1,18 @@
 import json
 from flask import Blueprint, abort, request
+from companies_storage import CompanyStorage
 
 routes = Blueprint('companies', __name__)
-
-companies = {
-    1: {'name': 'Moderna', 'region': 'USA', 'field': 'biotech'},
-    2: {'name': 'Roche', 'region': 'Switzerland', 'field': 'biotech'}
-}
 
 
 @routes.get('/')
 def get_all():
-    return json.dumps(companies)
+    return json.dumps(CompanyStorage.get_all)
 
 
 @routes.get('/<int:uid>')
 def get_by_id(uid):
-    company = companies.get(uid)
+    company = CompanyStorage.get_by_id
     if company is None:
         abort(404, f"Unfortunately, company not found, uid: {uid}")
     return json.dumps(company)
@@ -24,18 +20,13 @@ def get_by_id(uid):
 
 @routes.delete('/<int:uid>')
 def del_by_id(uid):
-    company = companies.get(uid)
-    if company is None:
-        abort(404, f"Unfortunately, company not found, uid: {uid}")
-    del companies[uid]
-    return json.dumps(companies)
+    CompanyStorage.delete
+    return json.dumps(CompanyStorage.get_all)
 
 
 @routes.put('/<int:uid>')
 def change_company(uid):
     new_company = request.json
-    if uid not in companies:
-        abort(404, f"Unfortunately, company not found, uid: {uid}")
-    companies[uid] = new_company
-    return json.dumps(companies)
+    CompanyStorage.update(new_company)
+    return json.dumps(CompanyStorage.get_all)
 
