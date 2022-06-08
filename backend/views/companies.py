@@ -29,11 +29,10 @@ def get_by_id(uid):
 @routes.delete('/<int:uid>')
 def del_by_id(uid):
     storage.delete(uid)
-    return json.dumps(storage.get_all())
+    return {}, 204
 
 
 @routes.put('/<int:uid>')
 def change_company(uid):
     new_company = request.json
-    storage.update(new_company, uid)
-    return json.dumps(storage.get_all())
+    return storage.update(new_company)

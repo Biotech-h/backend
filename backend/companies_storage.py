@@ -18,10 +18,13 @@ class CompaniesStorage:
             abort(404, f'uid {uid} not found')
         del self.storage[uid]
 
-    def update(self, company, uid):
+    def update(self, company):
+        uid = company['uid']
         if not self.storage.get(uid):
             abort(404, f'uid {uid} not found')
+
         self.storage[uid] = company
+        return company
 
     def get_by_id(self, uid):
         if not self.storage.get(uid):
