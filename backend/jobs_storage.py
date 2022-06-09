@@ -10,7 +10,7 @@ class JobStorage:
         self.storage[uid] = job
         return job
 
-    def delete(self, uid) -> int:
+    def delete(self, uid):
         if not self.storage.get(uid):
             raise ValueError(f'uid {uid} not found')
         del self.storage[uid]
@@ -29,6 +29,3 @@ class JobStorage:
 
     def get_all(self):
         return self.storage.values()
-
-    def __repr__(self):
-        return f"<Existing vacancy: {self.storage}>"
