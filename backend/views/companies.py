@@ -1,6 +1,7 @@
 import json
 from flask import Blueprint, abort, request
 from backend.companies_storage import CompaniesStorage
+from backend.errors import ConflictError, NotFoundError
 
 storage = CompaniesStorage()
 
@@ -12,7 +13,7 @@ def add():
     new_company = request.json
     try:
         company = storage.add(new_company)
-    except ValueError as err:
+    except ConflictError as err:
         abort(409, str(err))
 
     return company
@@ -27,8 +28,8 @@ def get_all():
 def get_by_id(uid):
     try:
         company = storage.get_by_id(uid)
-    except ValueError as err:
-        abort(409, str(err))
+    except NotFoundError as err:
+        abort(404, str(err))
 
     return company
 
@@ -37,8 +38,8 @@ def get_by_id(uid):
 def del_by_id(uid):
     try:
         storage.delete(uid)
-    except ValueError as err:
-        abort(409, str(err))
+    except NotFoundError as err:
+        abort(404, str(err))
 
     return {}, 204
 
@@ -48,7 +49,7 @@ def change_company(uid):
     new_company = request.json
     try:
         company = storage.update(new_company)
-    except ValueError as err:
-        abort(409, str(err))
+    except NotFoundError as err:
+        abort(404, str(err))
 
     return company
