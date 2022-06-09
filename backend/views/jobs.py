@@ -1,43 +1,51 @@
 import json
-from flask import Blueprint, request
+from flask import Blueprint, request, abort
+from backend.jobs_storage import JobStorage
+
+storage = JobStorage()
 
 routes = Blueprint('jobs', __name__)
-
-jobs = {
-    1: {"title_job": "postdoctoral researcher",
-        "description": "<str:description>"},
-    2: {"title_job": "team leader",
-        "description": "<str:description>"},
-    3: {"title_job": "associate professor",
-        "description": "<str:description>"}
-}
 
 
 @routes.get('/')
 def get_all():
-    return json.dumps(jobs)
+    return json.dumps(list(storage.get_all()))
 
 
 @routes.get('/<int:uid>')
 def get_by_id(uid):
-    job = jobs.get(uid)
-    return json.dumps(job)
+    try:
+        job = storage.get_by_id(uid)
+    except ValueError as err:
+        abort(409, str(err))
+
+    return job
 
 
 @routes.delete('/<int:uid>')
 def del_by_id(uid):
-    del jobs[uid]
+    try:
+        storage.delete(uid)
+    except ValueError as err:
+        abort(409, str(err))
     return {}, 204
 
 
 @routes.put('/<int:uid>')
-def change_job(uid):
-    jobs[uid] = request.json
-    return jobs.get(uid)
+def change_job():
+    new_job = request.json
+    try:
+        job = storage.update(new_job)
+    except ValueError as err:
+        abort(409, str(err))
+    return job
 
 
 @routes.post('/')
-def add_job():
-    payload = request.json
-    jobs.append(payload)
-    return payload
+def add():
+    new_job = request.json
+    try:
+        job = storage.add(new_job)
+    except ValueError as err:
+        abort(409, str(err))
+    return job
