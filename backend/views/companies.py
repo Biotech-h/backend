@@ -2,6 +2,7 @@ import json
 from flask import Blueprint, abort, request
 from backend.companies_storage import CompaniesStorage
 from backend.errors import ConflictError, NotFoundError
+from backend.companies_model import CorrectCompany
 
 storage = CompaniesStorage()
 
@@ -10,9 +11,10 @@ routes = Blueprint('companies', __name__)
 
 @routes.post('/')
 def add():
-    new_company = request.json
+    payload = request.json
+    new_company = CorrectCompany(**payload)
     try:
-        company = storage.add(new_company)
+        company = storage.add(new_company.dict())
     except ConflictError as err:
         abort(409, str(err))
 
@@ -46,9 +48,10 @@ def del_by_id(uid):
 
 @routes.put('/<int:uid>')
 def change_company(uid):
-    new_company = request.json
+    payload = request.json
+    changed_company = CorrectCompany(**payload)
     try:
-        company = storage.update(new_company)
+        company = storage.update(changed_company.dict())
     except NotFoundError as err:
         abort(404, str(err))
 
