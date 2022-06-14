@@ -3,8 +3,11 @@ from flask import Blueprint, abort, request
 from backend.companies_storage import CompaniesStorage
 from backend.errors import ConflictError, NotFoundError
 from backend.companies_model import CorrectCompany
+import logging
 
 storage = CompaniesStorage()
+
+logger = logging.getLogger(__name__)
 
 routes = Blueprint('companies', __name__)
 
@@ -23,11 +26,13 @@ def add():
 
 @routes.get('/')
 def get_all():
+    logger.debug('request get all companies')
     return json.dumps(list(storage.get_all()))
 
 
 @routes.get('/<int:uid>')
 def get_by_id(uid):
+    logger.debug('[company] get by id: %s', uid)
     try:
         company = storage.get_by_id(uid)
     except NotFoundError as err:
@@ -38,6 +43,7 @@ def get_by_id(uid):
 
 @routes.delete('/<int:uid>')
 def del_by_id(uid):
+    logger.debug('[company] delete by id: %s', uid)
     try:
         storage.delete(uid)
     except NotFoundError as err:
@@ -48,6 +54,7 @@ def del_by_id(uid):
 
 @routes.put('/<int:uid>')
 def change_company(uid):
+    logger.debug('[company] change by id: %s', uid)
     payload = request.json
     changed_company = CorrectCompany(**payload)
     try:
