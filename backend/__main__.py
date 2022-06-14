@@ -1,6 +1,9 @@
 from flask import Flask
 from backend.views import jobs
 from backend.views import companies
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 app.register_blueprint(jobs.routes, url_prefix='/api/v1/jobs')
