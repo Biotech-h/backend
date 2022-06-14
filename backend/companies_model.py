@@ -1,11 +1,10 @@
-from pydantic import BaseModel, Field, PositiveInt
-from typing import Optional, List
+from pydantic import BaseModel, Field
 
 
 class CorrectCompany(BaseModel):
 
-    uid: Optional[PositiveInt]
+    uid: int = Field(ge=1)
     name: str = Field(min_length=2)
     region: str = Field(min_length=2)
-    field_of_activity: str = Field(min_length=2)
-    description: Optional[List[str]]
+    category: str = Field(min_length=2)
+    description: str
