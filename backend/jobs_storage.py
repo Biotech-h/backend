@@ -7,9 +7,8 @@ class JobStorage:
         self.uid = itertools.count(1)
 
     def add(self, job):
-        uid = next(self.uid)
-        if self.storage.get(uid):
-            raise ValueError(f'uid {uid} already exists')
+        job['uid'] = next(self.uid)
+        uid = job["uid"]
         self.storage[uid] = job
         return job
 
