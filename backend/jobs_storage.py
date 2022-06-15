@@ -1,10 +1,13 @@
+import itertools
+
 class JobStorage:
 
     def __init__(self):
         self.storage = {}
+        self.uid = itertools.count(1)
 
     def add(self, job):
-        uid = job['uid']
+        uid = next(self.uid)
         if self.storage.get(uid):
             raise ValueError(f'uid {uid} already exists')
         self.storage[uid] = job
