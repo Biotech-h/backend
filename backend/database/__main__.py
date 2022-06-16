@@ -1,4 +1,4 @@
-from backend.database.models import *
+from backend.database.models import *  # noqa: F401, F403
 from backend.database.db import Base, engine
 
 
