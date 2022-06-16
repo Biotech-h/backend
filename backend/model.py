@@ -1,11 +1,9 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from backend.db import Base
 
 
-class Company(db.Model):
-    id: db.Column(db.Integer, primary_key=True)
-    name: db.Column(db.String, nullable=False)
-    region: db.Column(db.String, nullable=False)
-    category: db.Column(db.String, nullable=False)
-    description: db.Column(db.Text, nullable=False)
+class Company(Base):
+    id: Column(Integer, primary_key=True)
+    name: Column(String, nullable=False)
+    region: Column(String, nullable=False)
+    category: Column(String, nullable=False)
+    description: Column(Text, nullable=False)
