@@ -1,15 +1,22 @@
 {
     "version": "0.2.0",
     "configurations": [
-
         {
             "name": "Python: Flask",
             "type": "python",
             "request": "launch",
             "module": "backend",
             "jinja": true,
-            "justMyCode": true, 
+            "justMyCode": true,
             "console": "internalConsole"
+        },
+        {
+          "name": "create db",
+          "type": "python",
+          "request": "launch",
+          "module": "backend.database",
+          "justMyCode": true,
+          "console": "internalConsole"
         }
     ]
 }
