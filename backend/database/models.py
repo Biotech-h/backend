@@ -1,4 +1,4 @@
-from backend.db import Base
+from database.db import Base
 
 
 class Company(Base):
