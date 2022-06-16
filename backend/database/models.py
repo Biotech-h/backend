@@ -1,9 +1,12 @@
-from database.db import Base
+from sqlalchemy import Column, Integer, String, Text
+from backend.database.db import Base
 
 
 class Company(Base):
-    id: Column(Integer, primary_key=True)
-    name: Column(String, nullable=False)
-    region: Column(String, nullable=False)
-    category: Column(String, nullable=False)
-    description: Column(Text, nullable=False)
+    __tablename__ = 'companies'
+
+    uid = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    region = Column(String, nullable=False)
+    category = Column(String, nullable=False)
+    description = Column(Text, nullable=False)
