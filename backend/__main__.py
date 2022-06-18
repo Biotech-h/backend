@@ -1,10 +1,12 @@
-from flask import Flask
-from backend.views import jobs
-from backend.views import companies
-from backend.errors import AppError
 import logging
 
+from flask import Flask
+
+from backend.errors import AppError
+from backend.views import companies, jobs
+
 logging.basicConfig(level=logging.INFO)
+
 
 def handle_app_errors(error: AppError):
     return {'error': error.reason}, error.status
@@ -15,5 +17,5 @@ app.register_blueprint(jobs.routes, url_prefix='/api/v1/jobs')
 app.register_blueprint(companies.routes, url_prefix='/api/v1/companies')
 app.register_error_handler(AppError, handle_app_errors)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run()
