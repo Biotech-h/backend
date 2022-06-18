@@ -7,6 +7,9 @@ authors = ["Irina Safenkova <saf-iri@yandex.ru>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 Flask = "^2.1.2"
+psycopg2-binary = "^2.9.3"
+SQLAlchemy = "^1.4.37"
+pydantic = "^1.9.1"
 
 [tool.poetry.dev-dependencies]
 
