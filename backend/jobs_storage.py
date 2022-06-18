@@ -1,5 +1,6 @@
 import itertools
 
+
 class JobStorage:
 
     def __init__(self):
@@ -8,14 +9,14 @@ class JobStorage:
 
     def add(self, job):
         job['uid'] = next(self.uid)
-        uid = job["uid"]
+        uid = job['uid']
         self.storage[uid] = job
         return job
 
     def delete(self, uid):
         if not self.storage.get(uid):
             raise ValueError(f'uid {uid} not found')
-        del self.storage[uid]
+        self.storage.pop(uid)
 
     def update(self, job):
         uid = job['uid']

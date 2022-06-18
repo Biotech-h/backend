@@ -1,5 +1,8 @@
 import json
-from flask import Blueprint, request, abort
+from http import HTTPStatus
+
+from flask import Blueprint, abort, request
+
 from backend.jobs_storage import JobStorage
 
 storage = JobStorage()
@@ -17,7 +20,7 @@ def get_by_id(uid):
     try:
         job = storage.get_by_id(uid)
     except ValueError as err:
-        abort(409, str(err))
+        abort(HTTPStatus.NOT_FOUND, str(err))
 
     return job
 
@@ -27,7 +30,7 @@ def del_by_id(uid):
     try:
         storage.delete(uid)
     except ValueError as err:
-        abort(409, str(err))
+        abort(HTTPStatus.NOT_FOUND, str(err))
     return {}, 204
 
 
@@ -37,15 +40,11 @@ def change_job():
     try:
         job = storage.update(new_job)
     except ValueError as err:
-        abort(409, str(err))
+        abort(HTTPStatus.NOT_FOUND, str(err))
     return job
 
 
 @routes.post('/')
 def add():
     new_job = request.json
-    try:
-        job = storage.add(new_job)
-    except ValueError as err:
-        abort(409, str(err))
-    return job
+    return storage.add(new_job)
