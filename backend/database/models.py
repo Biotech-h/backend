@@ -16,9 +16,10 @@ class Company(Base):
 class Vacancy(Base):
     __tablename__ = 'vacancies'
 
+    uid = Column(Integer, primary_key=True)
     company_uid = Column(Integer, ForeignKey(Company.uid), nullable=False)
     vacancy_name = Column(String, nullable=False)
-    salary = Column(Integer, nullable=False)
+    salary = Column(Integer, nullable=True)
     region = Column(String, nullable=False)
     category = Column(String, nullable=False)
     description = Column(Text, nullable=False)
