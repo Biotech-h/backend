@@ -8,3 +8,6 @@ class CorrectCompany(BaseModel):
     region: str = Field(min_length=2)
     category: str = Field(min_length=2)
     description: str
+
+    class Config:
+        orm_mode = True
