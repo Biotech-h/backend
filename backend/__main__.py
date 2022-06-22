@@ -1,4 +1,5 @@
 import logging
+import os
 
 from flask import Flask
 
@@ -17,5 +18,8 @@ app.register_blueprint(jobs.routes, url_prefix='/api/v1/jobs')
 app.register_blueprint(companies.routes, url_prefix='/api/v1/companies')
 app.register_error_handler(AppError, handle_app_errors)
 
+host = os.environ['HOST']
+port = os.environ['PORT']
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host=host, port=port)
