@@ -30,7 +30,7 @@ def get_all():
     logger.debug('request get all companies')
     all_companies = sql_storage.get_all()
 
-    return json.dumps(CorrectCompany.from_orm(companies).dict() for companies in all_companies)
+    return json.dumps(list((CorrectCompany.from_orm(companies).dict() for companies in all_companies)))
 
 
 @routes.get('/<int:uid>')

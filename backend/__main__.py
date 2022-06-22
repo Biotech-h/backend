@@ -18,4 +18,4 @@ app.register_blueprint(companies.routes, url_prefix='/api/v1/companies')
 app.register_error_handler(AppError, handle_app_errors)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=8080)
