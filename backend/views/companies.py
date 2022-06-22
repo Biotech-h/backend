@@ -20,10 +20,7 @@ routes = Blueprint('companies', __name__)
 def add():
     payload = request.json
     new_company = CorrectCompany(**payload)
-    try:
-        company = sql_storage.add(new_company)
-    except ConflictError as err:
-        abort(409, str(err))
+    company = sql_storage.add(new_company)
 
     return json.dumps(CorrectCompany.from_orm(company).dict())
 
@@ -32,16 +29,15 @@ def add():
 def get_all():
     logger.debug('request get all companies')
     all_companies = sql_storage.get_all()
-    return json.dumps(CorrectCompany.from_orm(companies).dict() for companies in all_companies)
+    result = [CorrectCompany.from_orm(companies).dict() for companies in all_companies]
+
+    return json.dumps(list(result))
 
 
 @routes.get('/<int:uid>')
 def get_by_id(uid):
     logger.debug('[company] get by id: %s', uid)
-    try:
-        company = sql_storage.get_by_id(uid)
-    except NotFoundError as err:
-        abort(404, str(err))
+    company = sql_storage.get_by_id(uid)
 
     return CorrectCompany.from_orm(company).dict()
 
@@ -49,10 +45,7 @@ def get_by_id(uid):
 @routes.delete('/<int:uid>')
 def del_by_id(uid):
     logger.debug('[company] delete by id: %s', uid)
-    try:
-        sql_storage.delete(uid)
-    except NotFoundError as err:
-        abort(404, str(err))
+    sql_storage.delete(uid)
 
     return {}, 204
 
@@ -62,9 +55,6 @@ def change_company(uid):
     logger.debug('[company] change by id: %s', uid)
     payload = request.json
     changed_company = CorrectCompany(**payload)
-    try:
-        company = sql_storage.update(changed_company)
-    except NotFoundError as err:
-        abort(404, str(err))
+    company = sql_storage.update(changed_company)
 
     return json.dumps(CorrectCompany.from_orm(company).dict())
