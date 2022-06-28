@@ -4,6 +4,8 @@ from http import HTTPStatus
 from flask import Blueprint, abort, request
 
 from backend.jobs_storage import JobStorage
+from backend.errors import ConflictError
+from backend.job_model import Job
 
 storage = JobStorage()
 
@@ -36,15 +38,13 @@ def del_by_id(uid):
 
 @routes.put('/<int:uid>')
 def change_job():
-    new_job = request.json
-    try:
-        job = storage.update(new_job)
-    except ValueError as err:
-        abort(HTTPStatus.NOT_FOUND, str(err))
-    return job
+    payload = request.json
+    new_job = Job(**payload)
+    return storage.update(new_job.dict())
 
 
 @routes.post('/')
 def add():
-    new_job = request.json
-    return storage.add(new_job)
+    payload = request.json
+    new_job = Job(**payload)
+    return storage.add(new_job.dict())
