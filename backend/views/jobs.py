@@ -40,19 +40,11 @@ def del_by_id(uid):
 def change_job():
     payload = request.json
     new_job = Job(**payload)
-    try:
-        job = storage.update(new_job.dict())
-    except ValueError as err:
-        abort(HTTPStatus.NOT_FOUND, str(err))
-    return job
+    return storage.update(new_job.dict())
 
 
 @routes.post('/')
 def add():
     payload = request.json
     new_job = Job(**payload)
-    try:
-        job = storage.add(new_job.dict())
-    except ConflictError as err:
-        abort(409, str(err))
-    return job
+    return storage.add(new_job.dict())

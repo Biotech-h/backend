@@ -1,4 +1,3 @@
-from asyncio.log import logger
 import logging
 
 from pydantic import ValidationError
@@ -15,8 +14,8 @@ logging.basicConfig(level=logging.INFO)
 def handle_app_errors(error: AppError):
     return {'error': error.reason}, error.status
 
-def handle_validation_errors(error: ValidationError)
-    logger.warning(str(error))
+
+def handle_validation_errors(error: ValidationError):
     return {'error': error.errors()}, 422
 
 
