@@ -17,7 +17,7 @@ class Job(Base):
     __tablename__ = 'jobs'
 
     uid = Column(Integer, primary_key=True)
-    company_uid = Column(Integer, ForeignKey(Company.uid), nullable=False)
+    company_uid = Column(Integer, ForeignKey(Company.uid), index=True, nullable=False)
     name = Column(String, nullable=False)
     salary = Column(Integer, nullable=True)
     description = Column(Text, nullable=False)

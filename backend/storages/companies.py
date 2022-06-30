@@ -1,7 +1,7 @@
-from backend.company_model import CorrectCompany
 from backend.database.db import db_session
 from backend.database.models import Company
 from backend.errors import NotFoundError
+from backend.schemas.company import CorrectCompany
 
 
 class CompaniesStorage():

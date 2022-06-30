@@ -1,7 +1,7 @@
 from backend.database.db import db_session
 from backend.database.models import Job
 from backend.errors import NotFoundError
-from backend.job_model import CorrectJob
+from backend.schemas.job import CorrectJob
 
 
 class JobsStorage():

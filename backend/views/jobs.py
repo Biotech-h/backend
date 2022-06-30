@@ -3,10 +3,10 @@ import logging
 
 from flask import Blueprint, request
 
-from backend.job_model import CorrectJob
-from backend.jobs_sqlstorage import JobsStorage
+from backend.schemas.job import CorrectJob
+from backend.storages.jobs import JobsStorage
 
-sql_storage = JobsStorage()
+storage = JobsStorage()
 
 logger = logging.getLogger(__name__)
 
@@ -16,16 +16,19 @@ routes = Blueprint('jobs', __name__)
 @routes.get('/')
 def get_all():
     logger.debug('request get all jobs')
-    all_jobs = sql_storage.get_all()
-    result = [CorrectJob.from_orm(jobs).dict() for jobs in all_jobs]
+    entities = storage.get_all()
+    jobs = [
+        CorrectJob.from_orm(job).dict()
+        for job in entities
+    ]
 
-    return json.dumps(list(result))
+    return json.dumps(list(jobs))
 
 
 @routes.get('/<int:uid>')
 def get_by_id(uid):
     logger.debug('[job] get by id: %s', uid)
-    job = sql_storage.get_by_id(uid)
+    job = storage.get_by_id(uid)
 
     return CorrectJob.from_orm(job).dict()
 
@@ -33,7 +36,7 @@ def get_by_id(uid):
 @routes.delete('/<int:uid>')
 def del_by_id(uid):
     logger.debug('[job] delete by id: %s', uid)
-    sql_storage.delete(uid)
+    storage.delete(uid)
 
     return {}, 204
 
@@ -43,7 +46,7 @@ def change_job(uid):
     logger.debug('[job] change by id: %s', uid)
     payload = request.json
     changed_job = CorrectJob(**payload)
-    job = sql_storage.update(changed_job)
+    job = storage.update(changed_job)
 
     return json.dumps(CorrectJob.from_orm(job).dict())
 
@@ -52,6 +55,6 @@ def change_job(uid):
 def add():
     payload = request.json
     new_job = CorrectJob(**payload)
-    job = sql_storage.add(new_job)
+    job = storage.add(new_job)
 
     return json.dumps(CorrectJob.from_orm(job).dict())

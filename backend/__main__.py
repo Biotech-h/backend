@@ -1,10 +1,9 @@
 import logging
 
-from pydantic import ValidationError
-from backend.config import port, host
-
 from flask import Flask
+from pydantic import ValidationError
 
+from backend.config import host, port
 from backend.errors import AppError
 from backend.views import companies, jobs
 
@@ -24,6 +23,7 @@ app.register_blueprint(jobs.routes, url_prefix='/api/v1/jobs')
 app.register_blueprint(companies.routes, url_prefix='/api/v1/companies')
 app.register_error_handler(AppError, handle_app_errors)
 app.register_error_handler(ValidationError, handle_validation_errors)
+
 
 if __name__ == '__main__':
     app.run(host=host, port=port)
