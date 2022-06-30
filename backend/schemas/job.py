@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 class CorrectJob(BaseModel):
 
-    uid: int = Field(ge=1)
+    uid: int
     name: str = Field(min_length=2)
     company_uid: int = Field(ge=1)
     salary: Optional[int]

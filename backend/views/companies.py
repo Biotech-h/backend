@@ -1,4 +1,4 @@
-import json
+import orjson
 import logging
 
 from flask import Blueprint, request
@@ -20,7 +20,7 @@ def add():
     new_company = CorrectCompany(**payload)
     company = storage.add(new_company)
 
-    return json.dumps(CorrectCompany.from_orm(company).dict())
+    return orjson.dumps(CorrectCompany.from_orm(company).dict())
 
 
 @routes.get('/')
@@ -32,7 +32,7 @@ def get_all():
         for company in entities
     ]
 
-    return json.dumps(list(companies))
+    return orjson.dumps(list(companies))
 
 
 @routes.get('/<int:uid>')
@@ -58,7 +58,4 @@ def update(uid):
     changed_company = CorrectCompany(**payload)
     company = storage.update(changed_company)
 
-    return json.dumps(CorrectCompany.from_orm(company).dict())
-
-
-# GET /api/v1/companies/10/jobs/
+    return orjson.dumps(CorrectCompany.from_orm(company).dict())

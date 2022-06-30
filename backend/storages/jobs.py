@@ -9,6 +9,7 @@ class JobsStorage():
 
     def add(self, job: CorrectJob):
         new_job = Job(
+            company_uid=job.company_uid,
             name=job.name,
             salary=job.salary,
             description=job.description,

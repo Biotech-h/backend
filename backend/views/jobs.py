@@ -1,4 +1,4 @@
-import json
+import orjson
 import logging
 
 from flask import Blueprint, request
@@ -22,7 +22,7 @@ def get_all():
         for job in entities
     ]
 
-    return json.dumps(list(jobs))
+    return orjson.dumps(list(jobs))
 
 
 @routes.get('/<int:uid>')
@@ -48,13 +48,14 @@ def change_job(uid):
     changed_job = CorrectJob(**payload)
     job = storage.update(changed_job)
 
-    return json.dumps(CorrectJob.from_orm(job).dict())
+    return orjson.dumps(CorrectJob.from_orm(job).dict())
 
 
 @routes.post('/')
 def add():
     payload = request.json
+    payload['uid'] = -1
     new_job = CorrectJob(**payload)
     job = storage.add(new_job)
 
-    return json.dumps(CorrectJob.from_orm(job).dict())
+    return orjson.dumps(CorrectJob.from_orm(job).dict())
