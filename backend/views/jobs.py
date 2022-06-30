@@ -1,50 +1,57 @@
 import json
-from http import HTTPStatus
+import logging
 
-from flask import Blueprint, abort, request
+from flask import Blueprint, request
 
-from backend.jobs_storage import JobStorage
-from backend.errors import ConflictError
-from backend.job_model import Job
+from backend.job_model import CorrectJob
+from backend.jobs_sqlstorage import JobsStorage
 
-storage = JobStorage()
+sql_storage = JobsStorage()
+
+logger = logging.getLogger(__name__)
 
 routes = Blueprint('jobs', __name__)
 
 
 @routes.get('/')
 def get_all():
-    return json.dumps(list(storage.get_all()))
+    logger.debug('request get all jobs')
+    all_jobs = sql_storage.get_all()
+    result = [CorrectJob.from_orm(jobs).dict() for jobs in all_jobs]
+
+    return json.dumps(list(result))
 
 
 @routes.get('/<int:uid>')
 def get_by_id(uid):
-    try:
-        job = storage.get_by_id(uid)
-    except ValueError as err:
-        abort(HTTPStatus.NOT_FOUND, str(err))
+    logger.debug('[job] get by id: %s', uid)
+    job = sql_storage.get_by_id(uid)
 
-    return job
+    return CorrectJob.from_orm(job).dict()
 
 
 @routes.delete('/<int:uid>')
 def del_by_id(uid):
-    try:
-        storage.delete(uid)
-    except ValueError as err:
-        abort(HTTPStatus.NOT_FOUND, str(err))
+    logger.debug('[job] delete by id: %s', uid)
+    sql_storage.delete(uid)
+
     return {}, 204
 
 
 @routes.put('/<int:uid>')
-def change_job():
+def change_job(uid):
+    logger.debug('[job] change by id: %s', uid)
     payload = request.json
-    new_job = Job(**payload)
-    return storage.update(new_job.dict())
+    changed_job = CorrectJob(**payload)
+    job = sql_storage.update(changed_job)
+
+    return json.dumps(CorrectJob.from_orm(job).dict())
 
 
 @routes.post('/')
 def add():
     payload = request.json
-    new_job = Job(**payload)
-    return storage.add(new_job.dict())
+    new_job = CorrectJob(**payload)
+    job = sql_storage.add(new_job)
+
+    return json.dumps(CorrectJob.from_orm(job).dict())

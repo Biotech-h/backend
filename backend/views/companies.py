@@ -1,13 +1,10 @@
 import json
-
-from flask import Blueprint, abort, request
-
-from backend.sql_storage import CompaniesStorage
-from backend.errors import ConflictError, NotFoundError
-from backend.companies_model import CorrectCompany
-
 import logging
 
+from flask import Blueprint, request
+
+from backend.companies_sqlstorage import CompaniesStorage
+from backend.company_model import CorrectCompany
 
 sql_storage = CompaniesStorage()
 

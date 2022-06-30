@@ -1,7 +1,7 @@
+from backend.company_model import CorrectCompany
 from backend.database.db import db_session
 from backend.database.models import Company
 from backend.errors import NotFoundError
-from backend.companies_model import CorrectCompany
 
 
 class CompaniesStorage():
@@ -9,10 +9,10 @@ class CompaniesStorage():
 
     def add(self, company: CorrectCompany):
         new_company = Company(
-            name = company.name,
-            region = company.region,
-            category = company.category,
-            description = company.description,
+            name=company.name,
+            region=company.region,
+            category=company.category,
+            description=company.description,
         )
         db_session.add(new_company)
         db_session.commit()
@@ -50,11 +50,3 @@ class CompaniesStorage():
             raise NotFoundError(self.name, f'uid {uid} not found')
 
         return CorrectCompany.from_orm(company)
-
-
-
-
-
-
-
-
