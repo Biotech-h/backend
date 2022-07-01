@@ -1,6 +1,6 @@
 from backend.database.db import db_session
-from backend.database.models import Company
-from backend.errors import NotFoundError
+from backend.database.models import Company, Job
+from backend.errors import NotFoundError, ConflictError
 from backend.schemas.company import CorrectCompany
 
 
@@ -23,6 +23,10 @@ class CompaniesStorage():
         company = Company.query.filter(Company.uid == uid).first()
         if not company:
             raise NotFoundError(self.name, f'uid {uid} not found')
+
+        company_uid = Job.query.filter(Job.company_uid == uid).first()
+        if company_uid:
+            raise ConflictError(self.name, 'Can not to delete company with jobs')
 
         db_session.delete(company)
         db_session.commit()
