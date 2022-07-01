@@ -1,6 +1,8 @@
+from sqlalchemy.exc import IntegrityError
+
 from backend.database.db import db_session
-from backend.database.models import Job, Company
-from backend.errors import NotFoundError, ConflictError
+from backend.database.models import Job
+from backend.errors import ConflictError, NotFoundError
 from backend.schemas.job import CorrectJob
 
 
@@ -17,11 +19,12 @@ class JobsStorage():
             date_expiring=job.date_expiring,
             url=job.url,
         )
-        company_uid = Company.query.filter(Company.uid == job.company_uid).first()
-        if not company_uid:
-            raise ConflictError(self.name, 'company uid does not exist')
+
         db_session.add(new_job)
-        db_session.commit()
+        try:
+            db_session.commit()
+        except IntegrityError:
+            raise ConflictError(self.name, f'company_uid: {job.company_uid} does not exist')
 
         return CorrectJob.from_orm(new_job)
 

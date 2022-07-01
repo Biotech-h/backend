@@ -1,6 +1,6 @@
-import orjson
 import logging
 
+import orjson
 from flask import Blueprint, request
 
 from backend.schemas.job import CorrectJob
