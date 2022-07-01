@@ -61,3 +61,8 @@ class JobsStorage():
             raise NotFoundError(self.name, f'uid {uid} not found')
 
         return CorrectJob.from_orm(job)
+
+    def get_jobs_by_company_id(self, uid):
+        entity = Job.query.filter(Job.company_uid == uid).all()
+
+        return [CorrectJob.from_orm(jobs) for jobs in entity]

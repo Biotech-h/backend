@@ -6,8 +6,11 @@ from flask import Blueprint, request
 from backend.schemas.company import CorrectCompany
 from backend.schemas.job import CorrectJob
 from backend.storages.companies import CompaniesStorage
+from backend.storages.jobs import JobsStorage
 
 storage = CompaniesStorage()
+job_storage = JobsStorage()
+
 
 logger = logging.getLogger(__name__)
 
@@ -65,17 +68,10 @@ def update(uid):
 @routes.get('<int:uid>/jobs/')
 def get_jobs_by_company_uid(uid):
     logger.debug('[jobs] get by company id: %s', uid)
-    entities = storage.get_jobs_by_company_id(uid)
+    entities = job_storage.get_jobs_by_company_id(uid)
     jobs = [
         CorrectJob.from_orm(job).dict()
         for job in entities
     ]
 
     return orjson.dumps(list(jobs))
-
-
-
-
-#    jobs = storage.get_jobs_by_company_id(uid)
-
-#   return orjson.dumps(list(jobs))

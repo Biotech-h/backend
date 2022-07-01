@@ -1,10 +1,9 @@
 from sqlalchemy.exc import IntegrityError
 
 from backend.database.db import db_session
-from backend.database.models import Company, Job
+from backend.database.models import Company
 from backend.errors import ConflictError, NotFoundError
 from backend.schemas.company import CorrectCompany
-from backend.schemas.job import CorrectJob
 
 
 class CompaniesStorage():
@@ -57,10 +56,3 @@ class CompaniesStorage():
             raise NotFoundError(self.name, f'uid {uid} not found')
 
         return CorrectCompany.from_orm(company)
-
-    def get_jobs_by_company_id(self, uid):
-        entity = Job.query.filter(Job.company_uid == uid).all()
-        if not entity:
-            raise NotFoundError(self.name, f'jobs with company uid {uid} does not exist')
-
-        return [CorrectJob.from_orm(jobs) for jobs in entity]
