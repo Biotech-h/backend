@@ -66,9 +66,9 @@ def update(uid):
 
 
 @routes.get('<int:uid>/jobs/')
-def get_jobs_by_company_uid(uid):
+def get_for_company(uid):
     logger.debug('[jobs] get by company id: %s', uid)
-    entities = job_storage.get_jobs_by_company_id(uid)
+    entities = job_storage.get_for_company(uid)
     jobs = [
         CorrectJob.from_orm(job).dict()
         for job in entities
