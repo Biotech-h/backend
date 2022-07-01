@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy import Column, Date, ForeignKey, Integer, String, Text
 
 from backend.database.db import Base
 
@@ -13,13 +13,14 @@ class Company(Base):
     description = Column(Text, nullable=False)
 
 
-class Vacancy(Base):
-    __tablename__ = 'vacancies'
+class Job(Base):
+    __tablename__ = 'jobs'
 
     uid = Column(Integer, primary_key=True)
-    company_uid = Column(Integer, ForeignKey(Company.uid), nullable=False)
-    vacancy_name = Column(String, nullable=False)
+    company_uid = Column(Integer, ForeignKey(Company.uid), index=True, nullable=False)
+    name = Column(String, nullable=False)
     salary = Column(Integer, nullable=True)
-    region = Column(String, nullable=False)
-    category = Column(String, nullable=False)
     description = Column(Text, nullable=False)
+    date_published = Column(Date, nullable=False)
+    date_expiring = Column(Date, nullable=False)
+    url = Column(String, nullable=False)

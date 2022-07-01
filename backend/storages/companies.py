@@ -1,7 +1,9 @@
+from sqlalchemy.exc import IntegrityError
+
 from backend.database.db import db_session
 from backend.database.models import Company
-from backend.errors import NotFoundError
-from backend.companies_model import CorrectCompany
+from backend.errors import ConflictError, NotFoundError
+from backend.schemas.company import CorrectCompany
 
 
 class CompaniesStorage():
@@ -9,10 +11,10 @@ class CompaniesStorage():
 
     def add(self, company: CorrectCompany):
         new_company = Company(
-            name = company.name,
-            region = company.region,
-            category = company.category,
-            description = company.description,
+            name=company.name,
+            region=company.region,
+            category=company.category,
+            description=company.description,
         )
         db_session.add(new_company)
         db_session.commit()
@@ -25,7 +27,11 @@ class CompaniesStorage():
             raise NotFoundError(self.name, f'uid {uid} not found')
 
         db_session.delete(company)
-        db_session.commit()
+
+        try:
+            db_session.commit()
+        except IntegrityError:
+            raise ConflictError(self.name, 'can not delete company with jobs')
 
     def update(self, company: CorrectCompany):
         changed_company = Company.query.filter(Company.uid == company.uid).first()
@@ -50,11 +56,3 @@ class CompaniesStorage():
             raise NotFoundError(self.name, f'uid {uid} not found')
 
         return CorrectCompany.from_orm(company)
-
-
-
-
-
-
-
-
