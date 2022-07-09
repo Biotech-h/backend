@@ -1,9 +1,13 @@
+import logging
+
 from sqlalchemy.exc import IntegrityError
 
 from backend.database.db import db_session
 from backend.database.models import Job
 from backend.errors import ConflictError, NotFoundError
 from backend.schemas.job import CorrectJob
+
+logger = logging.getLogger(__name__)
 
 
 class JobsStorage():
@@ -23,8 +27,12 @@ class JobsStorage():
         db_session.add(new_job)
         try:
             db_session.commit()
-        except IntegrityError:
-            raise ConflictError(self.name, f'company_uid: {job.company_uid} does not exist')
+        except IntegrityError as err:
+            logger.warning(err)
+            raise ConflictError(
+                self.name,
+                f'company_uid: {job.company_uid} does not exist',
+            ) from err
 
         return CorrectJob.from_orm(new_job)
 

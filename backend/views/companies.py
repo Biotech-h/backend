@@ -70,13 +70,10 @@ def get_for_company(uid):
     logger.debug('[jobs] get by company id: %s', uid)
     url = request.args.get('url')
     if url:
-        entities = job_storage.get_by_url(uid, url)
+        job = job_storage.get_by_url(uid, url)
+        jobs = [job]
     else:
-        entities = job_storage.get_for_company(uid)
+        jobs = job_storage.get_for_company(uid)
 
-    jobs = [
-        CorrectJob.from_orm(job).dict()
-        for job in entities
-    ]
-
-    return orjson.dumps(list(jobs))
+    payload = [job.dict() for job in jobs]
+    return orjson.dumps(payload)
