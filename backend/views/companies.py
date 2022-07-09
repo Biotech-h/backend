@@ -68,10 +68,12 @@ def update(uid):
 @routes.get('<int:uid>/jobs/')
 def get_for_company(uid):
     logger.debug('[jobs] get by company id: %s', uid)
-    entities = job_storage.get_for_company(uid)
-    jobs = [
-        CorrectJob.from_orm(job).dict()
-        for job in entities
-    ]
+    url = request.args.get('url')
+    if url:
+        job = job_storage.get_by_url(uid, url)
+        jobs = [job]
+    else:
+        jobs = job_storage.get_for_company(uid)
 
-    return orjson.dumps(list(jobs))
+    payload = [job.dict() for job in jobs]
+    return orjson.dumps(payload)

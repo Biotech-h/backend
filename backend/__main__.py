@@ -1,21 +1,25 @@
 import logging
 
-from database.db import db_session
 from flask import Flask
 from pydantic import ValidationError
 
 from backend.config import host, port
+from backend.database.db import db_session
 from backend.errors import AppError
 from backend.views import companies, jobs
 
 logging.basicConfig(level=logging.INFO)
 
+logger = logging.getLogger(__name__)
+
 
 def handle_app_errors(error: AppError):
+    logger.warning(error)
     return {'error': error.reason}, error.status
 
 
 def handle_validation_errors(error: ValidationError):
+    logger.warning(error)
     return {'error': error.errors()}, 422
 
 
