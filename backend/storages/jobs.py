@@ -66,3 +66,10 @@ class JobsStorage():
         entity = Job.query.filter(Job.company_uid == uid).all()
 
         return [CorrectJob.from_orm(jobs) for jobs in entity]
+
+    def get_by_url(self, company_id: int, url: str) -> CorrectJob:
+        job = Job.query.filter(Job.company_uid == company_id).filter(Job.url == url).first()
+        if not job:
+            raise NotFoundError(self.name, f'url: {url} not found, company: {company_id}')
+
+        return CorrectJob.from_orm(job)
