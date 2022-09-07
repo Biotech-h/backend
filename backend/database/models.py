@@ -20,6 +20,7 @@ class Job(Base):
     company_uid = Column(Integer, ForeignKey(Company.uid), index=True, nullable=False)
     name = Column(String, nullable=False)
     url = Column(String, nullable=False)
+    city = Column(String)
     salary = Column(Integer, nullable=True)
     description = Column(Text, nullable=True)
     date_published = Column(Date, nullable=True)
