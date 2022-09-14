@@ -1,7 +1,7 @@
 """create_db
 
 Revision ID: ac91ecdd3317
-Revises: 
+Revises:
 Create Date: 2022-09-12 23:36:50.542884
 
 """
