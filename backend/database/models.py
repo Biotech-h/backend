@@ -19,7 +19,6 @@ class Job(Base):
     uid = Column(Integer, primary_key=True)
     company_uid = Column(Integer, ForeignKey(Company.uid), index=True, nullable=False)
     name = Column(String, nullable=False)
-    city = Column(String, nullable=True)
     url = Column(String, nullable=False)
     salary = Column(Integer, nullable=True)
     description = Column(Text, nullable=True)
