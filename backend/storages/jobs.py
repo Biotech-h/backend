@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 
 from sqlalchemy.exc import IntegrityError
 
@@ -14,6 +15,7 @@ class JobsStorage():
     name = 'jobs'
 
     def add(self, job: CorrectJob):
+        today = date.today()
         new_job = Job(
             company_uid=job.company_uid,
             name=job.name,
@@ -22,6 +24,7 @@ class JobsStorage():
             date_published=job.date_published,
             date_expiring=job.date_expiring,
             url=job.url,
+            date_added=today,
         )
 
         db_session.add(new_job)
