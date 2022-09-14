@@ -14,5 +14,8 @@ db.create:
 db.makemigrations:
 	@alembic revision --autogenerate -m "${message}"
 
-db.migrate:
+migrate.upgrade:
 	@alembic upgrade head
+
+migrate.downgrade:
+	@alembic downgrade ${message}
