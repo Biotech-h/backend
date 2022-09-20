@@ -12,4 +12,8 @@ RUN poetry install --no-dev
 
 COPY backend /app/backend
 
+COPY alembic.ini /app/
+
+COPY migrations /app/migrations
+
 CMD ["python", "-m", "backend"]
