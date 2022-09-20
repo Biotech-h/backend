@@ -22,5 +22,6 @@ class Job(Base):
     url = Column(String, nullable=False)
     salary = Column(Integer, nullable=True)
     description = Column(Text, nullable=True)
+    date_added = Column(Date, nullable=True)
     date_published = Column(Date, nullable=True)
     date_expiring = Column(Date, nullable=True)

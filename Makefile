@@ -10,3 +10,12 @@ lint:
 
 db.create:
 	@python -m backend.database
+
+db.makemigrations:
+	@alembic revision --autogenerate -m "${message}"
+
+migrate.upgrade:
+	@alembic upgrade head
+
+migrate.downgrade:
+	@alembic downgrade ${message}

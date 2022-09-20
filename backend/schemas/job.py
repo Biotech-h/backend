@@ -14,6 +14,7 @@ class CorrectJob(BaseModel):
     salary: Optional[int]
     description: Optional[str] = Field(max_length=MAX_JOB_DESCRIPTION)
     date_published: Optional[date]
+    date_added: Optional[date]
     date_expiring: Optional[date]
     url: str
 
